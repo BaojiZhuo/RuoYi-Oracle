@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('属性列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>External ATTRIB number：</label>
+                                <input type="text" name="attribId"/>
+                            </li>
+                            <li>
+                                <label>System id of catalogue：</label>
+                                <input type="text" name="catalogNo"/>
+                            </li>
+                            <li>
+                                <label>Optionally identifies a calculation parameter to be fed by this attribute：</label>
+                                <input type="text" name="calcParam"/>
+                            </li>
+                            <li>
+                                <label>The type (heading) for the physical value. E.g. "mm OD"：</label>
+                                <select name="physicalValueType">
+                                    <option value="">所有</option>
+                                    <option value="-1">代码生成请选择字典属性</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>The unit of measure for the physical values for this attribute type - e.g. for bolt diameters this would be length in mm：</label>
+                                <input type="text" name="physicalValueUnitId"/>
+                            </li>
+                            <li>
+                                <label>Description of the attribute type：</label>
+                                <input type="text" name="descr"/>
+                            </li>
+                            <li>
+                                <label>Whether the value of this attribute can be defined against a Commodity  (1 = can, 0 = cannot)：</label>
+                                <input type="text" name="commodityLevel"/>
+                            </li>
+                            <li>
+                                <label>Whether the value of this attribute can be defined against a Size Reference (1 = can, 0 = cannot).：</label>
+                                <input type="text" name="sizeRefLevel"/>
+                            </li>
+                            <li>
+                                <label>Whether the value of this attribute can be defined against a Part (component (1 = can, 0 = cannot).：</label>
+                                <input type="text" name="partLevel"/>
+                            </li>
+                            <li>
+                                <label>Whether the value of this attribute can be defined against a Modeller (component (1 = can, 0 = cannot).：</label>
+                                <input type="text" name="modellerLevel"/>
+                            </li>
+                            <li>
+                                <label>Defined scope of the attribute type (0 = Internal, 1 = External).：</label>
+                                <input type="text" name="defScope"/>
+                            </li>
+                            <li>
+                                <label>Whether this attribute type is obsolete. (1 = Active, 0 = Obsolete)：</label>
+                                <input type="text" name="stat"/>
+                            </li>
+                            <li>
+                                <label>The category of attribute：</label>
+                                <input type="text" name="attribCategoryNo"/>
+                            </li>
+                            <li>
+                                <label>System id of discipline.：</label>
+                                <input type="text" name="drawDisciplineNo"/>
+                            </li>
+                            <li>
+                                <label>Initials for person defining the position：</label>
+                                <input type="text" name="defUsrId"/>
+                            </li>
+                            <li>
+                                <label>Definition date：</label>
+                                <input type="text" class="time-input" placeholder="请选择Definition date" name="defDate"/>
+                            </li>
+                            <li>
+                                <label>Defining application of row：</label>
+                                <input type="text" name="defApplNo"/>
+                            </li>
+                            <li>
+                                <label>Initials for person latest updating the position：</label>
+                                <input type="text" name="updUsrId"/>
+                            </li>
+                            <li>
+                                <label>Latest update date：</label>
+                                <input type="text" class="time-input" placeholder="请选择Latest update date" name="updDate"/>
+                            </li>
+                            <li>
+                                <label>Last updating application of row：</label>
+                                <input type="text" name="updApplNo"/>
+                            </li>
+                            <li>
+                                <label>Weighting to be applied for this attribute when matching to alternative parts (10=LOW, 20=MEDIUM, 30=HIGH)：</label>
+                                <input type="text" name="matchWeightingNo"/>
+                            </li>
+                            <li>
+                                <label>If attribute is system attribute.：</label>
+                                <input type="text" name="isSystem"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:attrib:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:attrib:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:attrib:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:attrib:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:attrib:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:attrib:remove')}]];
+        var prefix = ctx + "system/attrib";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "属性",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'attribNo',
+                    title: 'Internal ATTRIB number',
+                    visible: false
+                },
+                {
+                    field: 'attribId',
+                    title: 'External ATTRIB number'
+                },
+                {
+                    field: 'catalogNo',
+                    title: 'System id of catalogue'
+                },
+                {
+                    field: 'calcParam',
+                    title: 'Optionally identifies a calculation parameter to be fed by this attribute'
+                },
+                {
+                    field: 'physicalValueType',
+                    title: 'The type (heading) for the physical value. E.g. "mm OD"'
+                },
+                {
+                    field: 'physicalValueUnitId',
+                    title: 'The unit of measure for the physical values for this attribute type - e.g. for bolt diameters this would be length in mm'
+                },
+                {
+                    field: 'descr',
+                    title: 'Description of the attribute type'
+                },
+                {
+                    field: 'commodityLevel',
+                    title: 'Whether the value of this attribute can be defined against a Commodity  (1 = can, 0 = cannot)'
+                },
+                {
+                    field: 'sizeRefLevel',
+                    title: 'Whether the value of this attribute can be defined against a Size Reference (1 = can, 0 = cannot).'
+                },
+                {
+                    field: 'partLevel',
+                    title: 'Whether the value of this attribute can be defined against a Part (component (1 = can, 0 = cannot).'
+                },
+                {
+                    field: 'modellerLevel',
+                    title: 'Whether the value of this attribute can be defined against a Modeller (component (1 = can, 0 = cannot).'
+                },
+                {
+                    field: 'defScope',
+                    title: 'Defined scope of the attribute type (0 = Internal, 1 = External).'
+                },
+                {
+                    field: 'stat',
+                    title: 'Whether this attribute type is obsolete. (1 = Active, 0 = Obsolete)'
+                },
+                {
+                    field: 'attribCategoryNo',
+                    title: 'The category of attribute'
+                },
+                {
+                    field: 'drawDisciplineNo',
+                    title: 'System id of discipline.'
+                },
+                {
+                    field: 'defUsrId',
+                    title: 'Initials for person defining the position'
+                },
+                {
+                    field: 'defDate',
+                    title: 'Definition date'
+                },
+                {
+                    field: 'defApplNo',
+                    title: 'Defining application of row'
+                },
+                {
+                    field: 'updUsrId',
+                    title: 'Initials for person latest updating the position'
+                },
+                {
+                    field: 'updDate',
+                    title: 'Latest update date'
+                },
+                {
+                    field: 'updApplNo',
+                    title: 'Last updating application of row'
+                },
+                {
+                    field: 'matchWeightingNo',
+                    title: 'Weighting to be applied for this attribute when matching to alternative parts (10=LOW, 20=MEDIUM, 30=HIGH)'
+                },
+                {
+                    field: 'isSystem',
+                    title: 'If attribute is system attribute.'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.attribNo + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.attribNo + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

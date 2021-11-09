@@ -16,6 +16,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
+import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.ruoyi.common.constant.Constants;
@@ -29,7 +31,31 @@ import com.ruoyi.common.utils.StringUtils;
 public class HttpUtils
 {
     private static final Logger log = LoggerFactory.getLogger(HttpUtils.class);
+    public static void main(String[] args) {
+        sendGet("https://www.baidu.com/s","wd=asd");
+        String url="https://baidu.com";
+        OkHttpClient client = new OkHttpClient();
+        //创建一个Request
+        Request request = new Request.Builder()
+                .get()
+                .url(url)
+                .build();
+        //通过client发起请求
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
 
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String str = response.body().string();
+                    System.out.println(str);
+                }
+
+            }
+        });
+    }
     /**
      * 向指定 URL 发送GET方法的请求
      *

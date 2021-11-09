@@ -10,7 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <artifactId>ruoyi-admin</artifactId>
-
+    <properties>
+        <oracle.version>19.3.0.0</oracle.version>
+    </properties>
     <description>
         web服务入口
     </description>
@@ -42,11 +44,10 @@
             <artifactId>swagger-models</artifactId>
             <version>1.6.2</version>
         </dependency>
-
         <!--oracle驱动-->
         <dependency>
             <groupId>com.oracle</groupId>
-            <artifactId>ojdbc14</artifactId>
+            <artifactId>ojdbc8</artifactId>
             <version>${oracle.version}</version>
         </dependency>
 
@@ -66,6 +67,11 @@
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-generator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-spring-web</artifactId>
+            <version>3.0.0</version>
         </dependency>
 
     </dependencies>

@@ -5,8 +5,7 @@ package com.ruoyi.common.constant;
  * 
  * @author ruoyi
  */
-public class Constants
-{
+public class Constants {
     /**
      * UTF-8 字符集
      */
@@ -116,10 +115,23 @@ public class Constants
      * LDAP 远程方法调用
      */
     public static final String LOOKUP_LDAP = "ldap://";
+    /**
+     * ERM物料分类
+     */
+    public static final String WLFL = "http://10.71.16.233:3721/wsp/ythclglxt/wlfl";
+    /**
+     * ERM物料CC编码
+     */
+    public static final String WLCCBM = "http://10.71.16.233:3721/wsp/ythclglxt/wlccbm";
+    /**
+     * ERM物料ID编码
+     */
+    public static final String WLIDBM = "http://10.71.16.233:3721/wsp/ythclglxt/wlidbm";
+
 
     /**
      * 定时任务违规的字符
      */
-    public static final String[] JOB_ERROR_STR = { "java.net.URL", "javax.naming.InitialContext", "org.yaml.snakeyaml",
-            "org.springframework.jndi" };
+    public static final String[] JOB_ERROR_STR = {"java.net.URL", "javax.naming.InitialContext", "org.yaml.snakeyaml",
+            "org.springframework.jndi"};
 }

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('CC码列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>Commodity code.：</label>
+                                <input type="text" name="commodityId"/>
+                            </li>
+                            <li>
+                                <label>Set to COMMODITY_NO to fake uniqueness of the Commodity Code. Set to 0 for approved Commodities enforce uniqueness.：</label>
+                                <input type="text" name="fakeUnique"/>
+                            </li>
+                            <li>
+                                <label>System id of catalogue.：</label>
+                                <input type="text" name="catalogNo"/>
+                            </li>
+                            <li>
+                                <label>System id of class for this commodity (and its parts).：</label>
+                                <input type="text" name="commodityClassNo"/>
+                            </li>
+                            <li>
+                                <label>Method used to define this Commodity (1 = Generated, 2 = UserDefined, 3 = UserDefinedPartNumber, 4 = SubCode).：</label>
+                                <input type="text" name="defMethodNo"/>
+                            </li>
+                            <li>
+                                <label>Whether datasheet required (1 = True, 0 = False).：</label>
+                                <input type="text" name="datasheetReqd"/>
+                            </li>
+                            <li>
+                                <label>Whether part numbers for this Commodity may appear on requisitions (and other formal project reports) .(1 = True, 0 - False).：</label>
+                                <input type="text" name="prntPartNo"/>
+                            </li>
+                            <li>
+                                <label>The unit of measure for the quantity of this commodity (e.g. whether it is purchased by length or by number off).：</label>
+                                <input type="text" name="unitId"/>
+                            </li>
+                            <li>
+                                <label>Legacy commodity code.：</label>
+                                <input type="text" name="commodityCodeOrig"/>
+                            </li>
+                            <li>
+                                <label>Approval status of Commodity (1 =  Working, 2 = Approved).：</label>
+                                <input type="text" name="approvalStatusNo"/>
+                            </li>
+                            <li>
+                                <label>Whether this part is obsolete. (1 = Active, 0 = Obsolete).：</label>
+                                <input type="text" name="stat"/>
+                            </li>
+                            <li>
+                                <label>Initials for person defining the COMMODITY.：</label>
+                                <input type="text" name="defUsrId"/>
+                            </li>
+                            <li>
+                                <label>Definition date.：</label>
+                                <input type="text" class="time-input" placeholder="请选择Definition date." name="defDate"/>
+                            </li>
+                            <li>
+                                <label>Initials for person latest updating the COMMODITY.：</label>
+                                <input type="text" name="updUsrId"/>
+                            </li>
+                            <li>
+                                <label>Latest update date.：</label>
+                                <input type="text" class="time-input" placeholder="请选择Latest update date." name="updDate"/>
+                            </li>
+                            <li>
+                                <label>Unique id of the spec entry：</label>
+                                <input type="text" name="specEntryNo"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:commodity:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:commodity:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:commodity:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:commodity:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:commodity:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:commodity:remove')}]];
+        var prefix = ctx + "system/commodity";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "CC码",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'commodityNo',
+                    title: 'System id of commodity..',
+                    visible: false
+                },
+                {
+                    field: 'commodityId',
+                    title: 'Commodity code.'
+                },
+                {
+                    field: 'fakeUnique',
+                    title: 'Set to COMMODITY_NO to fake uniqueness of the Commodity Code. Set to 0 for approved Commodities enforce uniqueness.'
+                },
+                {
+                    field: 'catalogNo',
+                    title: 'System id of catalogue.'
+                },
+                {
+                    field: 'commodityClassNo',
+                    title: 'System id of class for this commodity (and its parts).'
+                },
+                {
+                    field: 'defMethodNo',
+                    title: 'Method used to define this Commodity (1 = Generated, 2 = UserDefined, 3 = UserDefinedPartNumber, 4 = SubCode).'
+                },
+                {
+                    field: 'datasheetReqd',
+                    title: 'Whether datasheet required (1 = True, 0 = False).'
+                },
+                {
+                    field: 'prntPartNo',
+                    title: 'Whether part numbers for this Commodity may appear on requisitions (and other formal project reports) .(1 = True, 0 - False).'
+                },
+                {
+                    field: 'unitId',
+                    title: 'The unit of measure for the quantity of this commodity (e.g. whether it is purchased by length or by number off).'
+                },
+                {
+                    field: 'commodityCodeOrig',
+                    title: 'Legacy commodity code.'
+                },
+                {
+                    field: 'approvalStatusNo',
+                    title: 'Approval status of Commodity (1 =  Working, 2 = Approved).'
+                },
+                {
+                    field: 'stat',
+                    title: 'Whether this part is obsolete. (1 = Active, 0 = Obsolete).'
+                },
+                {
+                    field: 'defUsrId',
+                    title: 'Initials for person defining the COMMODITY.'
+                },
+                {
+                    field: 'defDate',
+                    title: 'Definition date.'
+                },
+                {
+                    field: 'updUsrId',
+                    title: 'Initials for person latest updating the COMMODITY.'
+                },
+                {
+                    field: 'updDate',
+                    title: 'Latest update date.'
+                },
+                {
+                    field: 'specEntryNo',
+                    title: 'Unique id of the spec entry'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.commodityNo + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.commodityNo + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

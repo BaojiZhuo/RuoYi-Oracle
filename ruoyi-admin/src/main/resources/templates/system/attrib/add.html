@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增属性')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-attrib-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">External ATTRIB number：</label>
+                <div class="col-sm-8">
+                    <input name="attribId" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">System id of catalogue：</label>
+                <div class="col-sm-8">
+                    <input name="catalogNo" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">Optionally identifies a calculation parameter to be fed by this attribute：</label>
+                <div class="col-sm-8">
+                    <input name="calcParam" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">The type (heading) for the physical value. E.g. "mm OD"：</label>
+                <div class="col-sm-8">
+                    <select name="physicalValueType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">The unit of measure for the physical values for this attribute type - e.g. for bolt diameters this would be length in mm：</label>
+                <div class="col-sm-8">
+                    <input name="physicalValueUnitId" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">Description of the attribute type：</label>
+                <div class="col-sm-8">
+                    <input name="descr" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">Whether the value of this attribute can be defined against a Commodity  (1 = can, 0 = cannot)：</label>
+                <div class="col-sm-8">
+                    <input name="commodityLevel" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">Whether the value of this attribute can be defined against a Size Reference (1 = can, 0 = cannot).：</label>
+                <div class="col-sm-8">
+                    <input name="sizeRefLevel" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">Whether the value of this attribute can be defined against a Part (component (1 = can, 0 = cannot).：</label>
+                <div class="col-sm-8">
+                    <input name="partLevel" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">Whether the value of this attribute can be defined against a Modeller (component (1 = can, 0 = cannot).：</label>
+                <div class="col-sm-8">
+                    <input name="modellerLevel" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">Defined scope of the attribute type (0 = Internal, 1 = External).：</label>
+                <div class="col-sm-8">
+                    <input name="defScope" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">Whether this attribute type is obsolete. (1 = Active, 0 = Obsolete)：</label>
+                <div class="col-sm-8">
+                    <input name="stat" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">The category of attribute：</label>
+                <div class="col-sm-8">
+                    <input name="attribCategoryNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">System id of discipline.：</label>
+                <div class="col-sm-8">
+                    <input name="drawDisciplineNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">Initials for person defining the position：</label>
+                <div class="col-sm-8">
+                    <input name="defUsrId" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">Definition date：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="defDate" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">Defining application of row：</label>
+                <div class="col-sm-8">
+                    <input name="defApplNo" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">Initials for person latest updating the position：</label>
+                <div class="col-sm-8">
+                    <input name="updUsrId" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">Latest update date：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="updDate" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">Last updating application of row：</label>
+                <div class="col-sm-8">
+                    <input name="updApplNo" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">Weighting to be applied for this attribute when matching to alternative parts (10=LOW, 20=MEDIUM, 30=HIGH)：</label>
+                <div class="col-sm-8">
+                    <input name="matchWeightingNo" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">If attribute is system attribute.：</label>
+                <div class="col-sm-8">
+                    <input name="isSystem" class="form-control" type="text" required>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "system/attrib"
+        $("#form-attrib-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-attrib-add').serialize());
+            }
+        }
+
+        $("input[name='defDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='updDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

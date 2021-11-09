@@ -3,19 +3,21 @@ spring:
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: oracle.jdbc.driver.OracleDriver
+#        driverClassName: com.mysql.cj.jdbc.Driver
         druid:
             # 主库数据源
             master:
-                url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
-                username: root
-                password: password
+                url: jdbc:oracle:thin:@127.0.0.1:1521/MRDMS
+                username: erm_cc7
+                password: erm_cc7
             # 从库数据源
             slave:
                 # 从数据源开关/默认关闭
-                enabled: false
-                url: 
-                username: 
-                password: 
+                enabled: true
+                url: jdbc:oracle:thin:@10.71.16.243:1521/ERM
+                username: ERM_CC7_M1
+                password: Welcome1
+                driverClassName: oracle.jdbc.driver.OracleDriver
             # 初始连接数
             initialSize: 5
             # 最小连接池数量

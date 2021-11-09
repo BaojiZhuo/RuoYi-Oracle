@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('Table containing Class Hierarchy列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>Name of class.：</label>
+                            <input type="text" name="classId"/>
+                        </li>
+                        <li>
+                            <label>System id of catalogue.：</label>
+                            <input type="text" name="catalogNo"/>
+                        </li>
+                        <li>
+                            <label>Sequence number of the class within parent class, or the top level if there is no parent.：</label>
+                            <input type="text" name="seqNo"/>
+                        </li>
+                        <li>
+                            <label>Description of class.：</label>
+                            <input type="text" name="descr"/>
+                        </li>
+                        <li>
+                            <label>Indicates valid entries (1 = Active, 0 = Obsolete).：</label>
+                            <input type="text" name="stat"/>
+                        </li>
+                        <li>
+                            <label>Class approval status. (1 = Working, 2 = Approved)：</label>
+                            <input type="text" name="approvalStatusNo"/>
+                        </li>
+                        <li>
+                            <label>Specifies the parent (if any) for a class. A null value indicates a top level class.：</label>
+                            <input type="text" name="parentClassNo"/>
+                        </li>
+                        <li>
+                            <label>System id of discipline.：</label>
+                            <input type="text" name="drawDisciplineNo"/>
+                        </li>
+                        <li>
+                            <label>The ultimate type of catalogue entity generated from this class. (1 = Commodity, 2 = Size Reference Format, 3 = Basic Component Type, 4 = Commodity Code Format, 5 = Part Number Format, 6 = CATREF Format, 7 = SPREF Format, 8 = STYP Format, 9 = CMPREF Format, 10 = BLTREF Format, 11 = Compound Component Type, 12 = Sub Commodity code).：</label>
+                            <input type="text" name="catEntityTypeNo"/>
+                        </li>
+                        <li>
+                            <label>Whether this class can be instantiated. (1 = Can instantiate, 0 = Cannot instantiate).：</label>
+                            <input type="text" name="canInstantiate"/>
+                        </li>
+                        <li>
+                            <label>Default branch code to be used for this type of component in branch tables.：</label>
+                            <input type="text" name="branchCode"/>
+                        </li>
+                        <li>
+                            <label>Whether this class is internal or external (0 = Internal, 1 = External).：</label>
+                            <input type="text" name="defScopeNo"/>
+                        </li>
+                        <li>
+                            <label>Whether bolts required. (1 - Required, 0 = Not required).：</label>
+                            <input type="text" name="boltsRequired"/>
+                        </li>
+                        <li>
+                            <label>Which size to use for the BLTREF FirstSize = 1 SecondSize = 4 ThirdSize = 5. Null is assumed to be the FirstSize：</label>
+                            <input type="text" name="boltAtSizeNo"/>
+                        </li>
+                        <li>
+                            <label>System id of the spec short code.：</label>
+                            <input type="text" name="specShortCodeNo"/>
+                        </li>
+                        <li>
+                            <label>The category of component (1 = PIPE, 2 = BOLTS, 3 = BOLTITEMS, 4 = INSUL).：</label>
+                            <input type="text" name="compCategoryNo"/>
+                        </li>
+                        <li>
+                            <label>Default spec component group for this Component Type.：</label>
+                            <input type="text" name="specCompGroupNo"/>
+                        </li>
+                        <li>
+                            <label>Unit of class.：</label>
+                            <input type="text" name="unitId"/>
+                        </li>
+                        <li>
+                            <label>The commodity code prefix for this component type：</label>
+                            <input type="text" name="commodityCodePref"/>
+                        </li>
+                        <li>
+                            <label>Defines Sub-Code uniqueness.(1 = Sequence, 2 = Set)：</label>
+                            <input type="text" name="uniqueness"/>
+                        </li>
+                        <li>
+                            <label>Whether this class can have size less parts in standard catalogue.：</label>
+                            <input type="text" name="allowSizeLess"/>
+                        </li>
+                        <li>
+                            <label>Identifies defining application for this class.：</label>
+                            <input type="text" name="defApplNo"/>
+                        </li>
+                        <li>
+                            <label>Initials for person defining the class：</label>
+                            <input type="text" name="defUsrId"/>
+                        </li>
+                        <li>
+                            <label>Definition date：</label>
+                            <input type="text" class="time-input" placeholder="请选择Definition date" name="defDate"/>
+                        </li>
+                        <li>
+                            <label>Identifies updating application for this class.：</label>
+                            <input type="text" name="updApplNo"/>
+                        </li>
+                        <li>
+                            <label>Initials for person latest updating the class：</label>
+                            <input type="text" name="updUsrId"/>
+                        </li>
+                        <li>
+                            <label>Latest update date：</label>
+                            <input type="text" class="time-input" placeholder="请选择Latest update date" name="updDate"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.treeTable.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:class:add">
+                <i class="fa fa-plus"></i> 新增
+            </a>
+            <a class="btn btn-primary" onclick="$.operate.edit()" shiro:hasPermission="system:class:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-info" id="expandAllBtn">
+                <i class="fa fa-exchange"></i> 展开/折叠
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-tree-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var addFlag = [[${@permission.hasPermi('system:class:add')}]];
+    var editFlag = [[${@permission.hasPermi('system:class:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:class:remove')}]];
+    var prefix = ctx + "system/class";
+
+    $(function() {
+        var options = {
+            code: "classNo",
+            expandColumn: "1",
+            uniqueId: "classNo",
+            parentCode:"",
+            url: prefix + "/list",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove/{id}",
+            exportUrl: prefix + "/export",
+            modalName: "Table containing Class Hierarchy",
+            columns: [{
+                field: 'selectItem',
+                radio: true
+            },
+                {
+                    field: 'classId',
+                    title: 'Name of class.',
+                    align: 'left'
+                },
+                {
+                    field: 'catalogNo',
+                    title: 'System id of catalogue.',
+                    align: 'left'
+                },
+                {
+                    field: 'seqNo',
+                    title: 'Sequence number of the class within parent class, or the top level if there is no parent.',
+                    align: 'left'
+                },
+                {
+                    field: 'descr',
+                    title: 'Description of class.',
+                    align: 'left'
+                },
+                {
+                    field: 'stat',
+                    title: 'Indicates valid entries (1 = Active, 0 = Obsolete).',
+                    align: 'left'
+                },
+                {
+                    field: 'approvalStatusNo',
+                    title: 'Class approval status. (1 = Working, 2 = Approved)',
+                    align: 'left'
+                },
+                {
+                    field: 'parentClassNo',
+                    title: 'Specifies the parent (if any) for a class. A null value indicates a top level class.',
+                    align: 'left'
+                },
+                {
+                    field: 'drawDisciplineNo',
+                    title: 'System id of discipline.',
+                    align: 'left'
+                },
+                {
+                    field: 'catEntityTypeNo',
+                    title: 'The ultimate type of catalogue entity generated from this class. (1 = Commodity, 2 = Size Reference Format, 3 = Basic Component Type, 4 = Commodity Code Format, 5 = Part Number Format, 6 = CATREF Format, 7 = SPREF Format, 8 = STYP Format, 9 = CMPREF Format, 10 = BLTREF Format, 11 = Compound Component Type, 12 = Sub Commodity code).',
+                    align: 'left'
+                },
+                {
+                    field: 'canInstantiate',
+                    title: 'Whether this class can be instantiated. (1 = Can instantiate, 0 = Cannot instantiate).',
+                    align: 'left'
+                },
+                {
+                    field: 'branchCode',
+                    title: 'Default branch code to be used for this type of component in branch tables.',
+                    align: 'left'
+                },
+                {
+                    field: 'defScopeNo',
+                    title: 'Whether this class is internal or external (0 = Internal, 1 = External).',
+                    align: 'left'
+                },
+                {
+                    field: 'boltsRequired',
+                    title: 'Whether bolts required. (1 - Required, 0 = Not required).',
+                    align: 'left'
+                },
+                {
+                    field: 'boltAtSizeNo',
+                    title: 'Which size to use for the BLTREF FirstSize = 1 SecondSize = 4 ThirdSize = 5. Null is assumed to be the FirstSize',
+                    align: 'left'
+                },
+                {
+                    field: 'specShortCodeNo',
+                    title: 'System id of the spec short code.',
+                    align: 'left'
+                },
+                {
+                    field: 'compCategoryNo',
+                    title: 'The category of component (1 = PIPE, 2 = BOLTS, 3 = BOLTITEMS, 4 = INSUL).',
+                    align: 'left'
+                },
+                {
+                    field: 'specCompGroupNo',
+                    title: 'Default spec component group for this Component Type.',
+                    align: 'left'
+                },
+                {
+                    field: 'unitId',
+                    title: 'Unit of class.',
+                    align: 'left'
+                },
+                {
+                    field: 'commodityCodePref',
+                    title: 'The commodity code prefix for this component type',
+                    align: 'left'
+                },
+                {
+                    field: 'uniqueness',
+                    title: 'Defines Sub-Code uniqueness.(1 = Sequence, 2 = Set)',
+                    align: 'left'
+                },
+                {
+                    field: 'allowSizeLess',
+                    title: 'Whether this class can have size less parts in standard catalogue.',
+                    align: 'left'
+                },
+                {
+                    field: 'defApplNo',
+                    title: 'Identifies defining application for this class.',
+                    align: 'left'
+                },
+                {
+                    field: 'defUsrId',
+                    title: 'Initials for person defining the class',
+                    align: 'left'
+                },
+                {
+                    field: 'defDate',
+                    title: 'Definition date',
+                    align: 'left'
+                },
+                {
+                    field: 'updApplNo',
+                    title: 'Identifies updating application for this class.',
+                    align: 'left'
+                },
+                {
+                    field: 'updUsrId',
+                    title: 'Initials for person latest updating the class',
+                    align: 'left'
+                },
+                {
+                    field: 'updDate',
+                    title: 'Latest update date',
+                    align: 'left'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    align: 'left',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.classNo + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-info  btn-xs ' + addFlag + '" href="javascript:void(0)" onclick="$.operate.add(\'' + row.classNo + '\')"><i class="fa fa-plus"></i>新增</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.classNo + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.treeTable.init(options);
+    });
+</script>
+</body>
+</html>

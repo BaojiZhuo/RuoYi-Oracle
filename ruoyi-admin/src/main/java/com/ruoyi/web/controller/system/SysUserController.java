@@ -2,9 +2,15 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
@@ -38,6 +44,7 @@ import com.ruoyi.system.service.ISysUserService;
  */
 @Controller
 @RequestMapping("/system/user")
+@Api(tags ={"用户管理"} )
 public class SysUserController extends BaseController
 {
     private String prefix = "system/user";
@@ -64,6 +71,7 @@ public class SysUserController extends BaseController
     @RequiresPermissions("system:user:list")
     @PostMapping("/list")
     @ResponseBody
+    @ApiOperation("查询用户信息")
     public TableDataInfo list(SysUser user)
     {
         startPage();
